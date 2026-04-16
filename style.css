@@ -1,0 +1,586 @@
+/* ============================================================
+   Base & Reset
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cream: #fdfaf4;
+  --warm-white: #ffffff;
+  --text-dark: #1c1a14;
+  --text-muted: #7a6a4f;
+  --accent: #b89250;
+  --accent-light: #f5eed8;
+  --accent-hover: #8a6e25;
+  --border: #e0d3b0;
+  --error: #c0392b;
+  --success: #4a7c59;
+  --shadow: 0 6px 32px rgba(28, 26, 20, 0.12);
+  --radius: 12px;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: radial-gradient(ellipse at top, #f5e9c8 0%, #fdfaf4 55%);
+  color: var(--text-dark);
+  font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Arabic font override */
+[dir="rtl"] {
+  font-family: 'Cairo', system-ui, sans-serif;
+}
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  font-family: 'Cairo', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+h1 { font-size: 3.2rem; letter-spacing: 0.04em; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.4rem; }
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.page-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+/* ============================================================
+   Hero / Header
+   ============================================================ */
+.hero {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+  background: linear-gradient(160deg, rgba(245, 238, 216, 0.35), transparent 70%);
+  border-radius: var(--radius);
+}
+
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.hero .ampersand {
+  color: var(--accent);
+  font-style: italic;
+  font-size: 1.1em;
+}
+
+.hero .event-details {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.hero .event-details strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.divider {
+  text-align: center;
+  color: var(--accent);
+  font-size: 1.4rem;
+  margin: 2rem 0;
+  letter-spacing: 0.5em;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  box-shadow: var(--shadow), inset 0 0 0 5px rgba(184, 146, 80, 0.06);
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  color: var(--accent-hover);
+  text-align: center;
+}
+
+.card-message {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   Form Elements
+   ============================================================ */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background: var(--cream);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(184, 146, 80, 0.15);
+}
+
+/* Radio group */
+.radio-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.radio-option {
+  flex: 1;
+}
+
+.radio-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-option label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--cream);
+  transition: all 0.2s;
+  user-select: none;
+  min-height: 3rem;
+}
+
+.radio-option input[type="radio"]:checked + label {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent-hover);
+  box-shadow: 0 0 0 3px rgba(184, 146, 80, 0.18);
+}
+
+.radio-option label:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: rgba(245, 238, 216, 0.45);
+}
+
+/* Guest names */
+.guest-fields {
+  display: none;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.guest-fields.visible {
+  display: block;
+}
+
+.guest-name-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.guest-name-row input {
+  flex: 1;
+}
+
+.btn-remove-guest {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.5rem 0.65rem;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-remove-guest:hover {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.btn-add-guest {
+  background: none;
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent-hover);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.btn-add-guest:hover {
+  background: var(--accent-light);
+}
+
+/* Submit button */
+.btn-submit {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  border: none;
+  border-radius: var(--radius);
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.9rem 2rem;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 1.5rem;
+  box-shadow: 0 3px 12px rgba(138, 110, 37, 0.3);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-hover), #5c4a10);
+  box-shadow: 0 5px 18px rgba(138, 110, 37, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ============================================================
+   Messages
+   ============================================================ */
+.message {
+  display: none;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.message.visible {
+  display: block;
+}
+
+.message.error {
+  background: #fdf0ef;
+  border: 1px solid #e8b4b0;
+  color: var(--error);
+}
+
+.message.success {
+  background: #f0f7f2;
+  border: 1px solid #a8ccb4;
+  color: var(--success);
+}
+
+/* ============================================================
+   Thank You State
+   ============================================================ */
+.thank-you {
+  display: none;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.thank-you.visible {
+  display: block;
+}
+
+.thank-you-icon {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  line-height: 1;
+  animation: heartbeat 1.5s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.thank-you h2 {
+  color: var(--accent-hover);
+  margin-bottom: 0.75rem;
+}
+
+.thank-you p {
+  color: var(--text-muted);
+}
+
+/* Site footer */
+.site-footer {
+  text-align: center;
+  color: var(--accent);
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+  letter-spacing: 0.5em;
+  opacity: 0.6;
+}
+
+/* ============================================================
+   Admin Page
+   ============================================================ */
+.admin-header {
+  text-align: center;
+  padding: 2rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+  font-size: 2rem;
+  color: var(--text-dark);
+}
+
+.admin-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summary-stat {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.summary-stat .number {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--accent-hover);
+}
+
+.summary-stat .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.guest-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.guest-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--warm-white);
+  font-size: 0.9rem;
+}
+
+.guest-table th {
+  background: var(--accent-light);
+  color: var(--text-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.guest-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dark);
+  vertical-align: middle;
+}
+
+.guest-table tr:last-child td {
+  border-bottom: none;
+}
+
+.guest-table tr:hover td {
+  background: var(--cream);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge.yes {
+  background: #dff0e6;
+  color: var(--success);
+}
+
+.badge.no {
+  background: #fde8e8;
+  color: var(--error);
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+/* ============================================================
+   Language Switcher
+   ============================================================ */
+.lang-switcher {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+[dir="rtl"] .lang-switcher {
+  justify-content: flex-start;
+}
+
+.lang-btn {
+  padding: 0.3rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  background: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.lang-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: rgba(245, 238, 216, 0.45);
+}
+
+.lang-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent-hover);
+}
+
+/* ============================================================
+   Responsive — Mobile
+   ============================================================ */
+@media (max-width: 600px) {
+  h1 { font-size: 2.2rem; }
+  .card { padding: 1.5rem 1.25rem; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-wrapper { padding: 1.5rem 1rem 3rem; }
+  .hero { padding: 2rem 1rem 1.5rem; }
+  .radio-group { flex-direction: column; gap: 0.6rem; }
+  .lang-switcher { justify-content: center; margin-bottom: 1.25rem; }
+  [dir="rtl"] .lang-switcher { justify-content: center; }
+}

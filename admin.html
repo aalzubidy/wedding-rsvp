@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — RSVP Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <header class="admin-header">
+      <h1>RSVP Report</h1>
+      <p>Ahmed &amp; Amira · September 12, 2026</p>
+    </header>
+
+    <!-- Password Gate -->
+    <div id="login-section" class="card">
+      <h2 class="card-title">Admin Access</h2>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input
+            type="password"
+            id="admin-password"
+            name="password"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+        <div class="message error" id="login-error" role="alert"></div>
+        <button type="submit" class="btn-submit" id="btn-login">View Report</button>
+      </form>
+    </div>
+
+    <!-- Report (hidden until authenticated) -->
+    <div id="report-section" style="display:none;">
+
+      <!-- Summary -->
+      <div class="summary-grid">
+        <div class="summary-stat">
+          <div class="number" id="stat-attending">—</div>
+          <div class="label">Attending</div>
+        </div>
+        <div class="summary-stat">
+          <div class="number" id="stat-declined">—</div>
+          <div class="label">Declined</div>
+        </div>
+        <div class="summary-stat">
+          <div class="number" id="stat-submissions">—</div>
+          <div class="label">Submissions</div>
+        </div>
+      </div>
+
+      <!-- Full guest list -->
+      <h2 class="section-title">All Responses</h2>
+      <div class="guest-table-wrapper">
+        <table class="guest-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Attending</th>
+              <th>Submitted By</th>
+              <th>Date &amp; Time</th>
+            </tr>
+          </thead>
+          <tbody id="guest-tbody">
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:1.5rem; text-align:right;">
+        <button class="btn-submit" id="btn-refresh" style="width:auto;padding:0.6rem 1.5rem;">Refresh</button>
+        <button class="btn-submit" id="btn-logout" style="width:auto;padding:0.6rem 1.5rem;margin-left:0.5rem;background:var(--text-muted);">Log Out</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const loginSection = document.getElementById('login-section');
+    const reportSection = document.getElementById('report-section');
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const btnLogin = document.getElementById('btn-login');
+    const btnRefresh = document.getElementById('btn-refresh');
+    const btnLogout = document.getElementById('btn-logout');
+
+    let currentPassword = '';
+
+    // ── Login ───────────────────────────────────────────────────────────────
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.textContent = '';
+      loginError.classList.remove('visible');
+
+      const password = document.getElementById('admin-password').value;
+      if (!password) return;
+
+      btnLogin.disabled = true;
+      btnLogin.textContent = 'Loading…';
+
+      const ok = await fetchReport(password);
+
+      if (!ok) {
+        loginError.textContent = 'Incorrect password or failed to load report.';
+        loginError.classList.add('visible');
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'View Report';
+      } else {
+        currentPassword = password;
+        loginSection.style.display = 'none';
+        reportSection.style.display = 'block';
+      }
+    });
+
+    // ── Refresh ─────────────────────────────────────────────────────────────
+    btnRefresh.addEventListener('click', () => fetchReport(currentPassword));
+
+    // ── Log out ─────────────────────────────────────────────────────────────
+    btnLogout.addEventListener('click', () => {
+      currentPassword = '';
+      document.getElementById('admin-password').value = '';
+      reportSection.style.display = 'none';
+      loginSection.style.display = 'block';
+    });
+
+    // ── Fetch & render ──────────────────────────────────────────────────────
+    async function fetchReport(password) {
+      try {
+        const params = new URLSearchParams({ password });
+        const res = await fetch(`/api/admin?${params}`);
+        if (!res.ok) return false;
+
+        const data = await res.json();
+        renderReport(data);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function renderReport(data) {
+      const { guests, submissions } = data;
+
+      // Compute summary
+      const attending = guests.filter(g => g.attending).length;
+      const declined = guests.filter(g => !g.attending).length;
+
+      document.getElementById('stat-attending').textContent = attending;
+      document.getElementById('stat-declined').textContent = declined;
+      document.getElementById('stat-submissions').textContent = submissions.length;
+
+      // Build table — group rows by submission for visual clarity
+      const tbody = document.getElementById('guest-tbody');
+      tbody.innerHTML = '';
+
+      let rowNum = 0;
+
+      // Map submission id → submitter's primary name (first name in that group)
+      const submitterMap = {};
+      submissions.forEach(sub => {
+        submitterMap[sub.added_by] = sub.first_name;
+      });
+
+      guests.forEach(guest => {
+        rowNum++;
+        const tr = document.createElement('tr');
+
+        const submittedAt = new Date(guest.submitted_at);
+        const dateStr = submittedAt.toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        });
+        const timeStr = submittedAt.toLocaleTimeString('en-US', {
+          hour: 'numeric', minute: '2-digit'
+        });
+
+        const submitterName = submitterMap[guest.added_by] || '—';
+        const isSelf = guest.name === submitterName;
+
+        tr.innerHTML = `
+          <td style="color:var(--text-muted);font-size:0.8rem;">${rowNum}</td>
+          <td>${escHtml(guest.name)}</td>
+          <td><span class="badge ${guest.attending ? 'yes' : 'no'}">${guest.attending ? 'Yes' : 'No'}</span></td>
+          <td style="color:var(--text-muted);font-size:0.85rem;">${isSelf ? '<em>self</em>' : escHtml(submitterName)}</td>
+          <td style="color:var(--text-muted);font-size:0.8rem;">${dateStr}, ${timeStr}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      if (guests.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">No responses yet.</td>';
+        tbody.appendChild(tr);
+      }
+    }
+
+    function escHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

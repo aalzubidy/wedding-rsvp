@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP — AA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="fr">Français</button>
+      <button class="lang-btn" data-lang="ar">العربية</button>
+    </div>
+
+    <!-- Hero -->
+    <header class="hero">
+      <h1 class="couple-names" data-i18n-html="coupleNames">Ahmed <span class="ampersand">&amp;</span> Amira</h1>
+      <div class="event-details">
+        <span><strong data-i18n="date">Saturday, September 12, 2026</strong></span>
+        <span data-i18n="time">8:00 PM</span>
+        <span data-i18n="venue">Le Pavillon of Gammarth, Tunis</span>
+      </div>
+    </header>
+
+    <div class="divider">· ♡ ·</div>
+
+    <!-- RSVP Card -->
+    <div class="card" id="rsvp-card">
+      <h2 class="card-title" data-i18n="cardTitle">Kindly Reply</h2>
+      <p class="card-message" data-i18n="cardMessage">We joyfully invite you to share our special day. Please let us know if you'll be celebrating with us.</p>
+
+      <form id="rsvp-form" novalidate>
+        <!-- Your Name -->
+        <div class="form-group">
+          <label for="submitter-name" data-i18n="yourName">Your Name</label>
+          <input
+            type="text"
+            id="submitter-name"
+            name="submitter-name"
+            placeholder="First and Last Name"
+            data-i18n-placeholder="yourNamePlaceholder"
+            autocomplete="name"
+            required
+          />
+        </div>
+
+        <!-- Attending? -->
+        <div class="form-group">
+          <label data-i18n="willYouAttend">Will you be attending?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="attending" id="attending-yes" value="yes" />
+              <label for="attending-yes" data-i18n="accepts">Joyfully Accepts</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="attending" id="attending-no" value="no" />
+              <label for="attending-no" data-i18n="declines">Regretfully Declines</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest names (shown only if attending = yes) -->
+        <div class="guest-fields" id="guest-fields">
+          <label data-i18n="guestsLabel">Guests Attending</label>
+          <div id="guest-list">
+            <!-- First guest = submitter (pre-filled, readonly) -->
+            <div class="guest-name-row" data-index="0">
+              <input type="text" id="guest-0" placeholder="Your name" readonly aria-label="Guest 1" />
+            </div>
+          </div>
+          <button type="button" class="btn-add-guest" id="btn-add-guest" data-i18n="addGuest">+ Add Another Guest</button>
+        </div>
+
+        <!-- Error message -->
+        <div class="message error" id="error-msg" role="alert"></div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit" id="btn-submit" disabled data-i18n="sendRsvp">Send RSVP</button>
+      </form>
+
+      <!-- Thank you state -->
+      <div class="thank-you" id="thank-you">
+        <div class="thank-you-icon">♡</div>
+        <h2 data-i18n="thankYouTitle">Thank You!</h2>
+        <p id="thank-you-msg"></p>
+      </div>
+    </div>
+
+    <div class="site-footer">· ♡ ·</div>
+
+  </div>
+
+  <script>
+    // ── i18n ────────────────────────────────────────────────────────────────
+    const i18n = {
+      en: {
+        dir: 'ltr', lang: 'en',
+        pageTitle: 'RSVP — Ahmed & Amira',
+        eyebrow: 'You are cordially invited to celebrate the marriage of',
+        coupleNames: 'Ahmed <span class="ampersand">&amp;</span> Amira',
+        date: 'Saturday, September 12, 2026',
+        time: '8:00 PM',
+        venue: 'Le Pavillon of Gammarth, Tunis',
+        cardTitle: 'Kindly Reply',
+        cardMessage: "We joyfully invite you to share our special day. Please let us know if you'll be celebrating with us.",
+        yourName: 'Your Name',
+        yourNamePlaceholder: 'First and Last Name',
+        willYouAttend: 'Will you be attending?',
+        accepts: 'Joyfully Accepts',
+        declines: 'Regretfully Declines',
+        guestsLabel: 'Guests Attending',
+        addGuest: '+ Add Another Guest',
+        guestPlaceholder: 'Guest {n} name',
+        sendRsvp: 'Send RSVP',
+        sending: 'Sending\u2026',
+        thankYouTitle: 'Thank You!',
+        thankYouYes: "We can't wait to celebrate with you!",
+        thankYouYesPlural: "We can't wait to celebrate with you and your guests!",
+        thankYouNo: 'We wish we could celebrate together. You will be missed!',
+        errName: 'Please enter your name.',
+        errAttending: 'Please let us know if you will be attending.',
+        errGuestName: 'Please enter at least one guest name.',
+        errNetwork: 'Network error. Please check your connection and try again.',
+        errGeneric: 'Something went wrong. Please try again.',
+      },
+      fr: {
+        dir: 'ltr', lang: 'fr',
+        pageTitle: 'RSVP — Ahmed & Amira',
+        eyebrow: 'Vous êtes cordialement invités à célébrer le mariage de',
+        coupleNames: 'Ahmed <span class="ampersand">&amp;</span> Amira',
+        date: 'Samedi 12 septembre 2026',
+        time: '20h00',
+        venue: 'Le Pavillon de Gammarth, Tunis',
+        cardTitle: 'Répondez S.V.P.',
+        cardMessage: 'Nous vous invitons chaleureusement à partager notre journée spéciale. Veuillez nous faire part de votre présence.',
+        yourName: 'Votre Nom',
+        yourNamePlaceholder: 'Prénom et Nom',
+        willYouAttend: 'Serez-vous présent(e) ?',
+        accepts: 'Accepte avec joie',
+        declines: 'Décline à regret',
+        guestsLabel: 'Invités présents',
+        addGuest: '+ Ajouter un invité',
+        guestPlaceholder: "Nom de l'invité {n}",
+        sendRsvp: 'Envoyer la réponse',
+        sending: 'Envoi en cours\u2026',
+        thankYouTitle: 'Merci !',
+        thankYouYes: 'Nous avons hâte de fêter cela avec vous !',
+        thankYouYesPlural: 'Nous avons hâte de fêter cela avec vous et vos invités !',
+        thankYouNo: 'Nous aurions tant aimé célébrer ensemble. Vous nous manquerez !',
+        errName: 'Veuillez entrer votre nom.',
+        errAttending: 'Veuillez nous indiquer si vous serez présent(e).',
+        errGuestName: "Veuillez entrer au moins un nom d'invité.",
+        errNetwork: 'Erreur réseau. Vérifiez votre connexion et réessayez.',
+        errGeneric: "Une erreur s'est produite. Veuillez réessayer.",
+      },
+      ar: {
+        dir: 'rtl', lang: 'ar',
+        pageTitle: 'تأكيد الحضور — أحمد وأميرة',
+        eyebrow: 'يسعدنا دعوتكم للاحتفال بزواج',
+        coupleNames: 'أحمد <span class="ampersand">و</span> أميرة',
+        date: 'السبت، 12 سبتمبر 2026',
+        time: 'الساعة 8:00 مساءً',
+        venue: 'لو باڤيون، قمرت، تونس',
+        cardTitle: 'يرجى التأكيد',
+        cardMessage: 'نسعد بدعوتكم للمشاركة في يومنا المميز. نأمل أن تتكرموا بإخبارنا عن مشاركتكم.',
+        yourName: 'الاسم',
+        yourNamePlaceholder: 'الاسم الأول والأخير',
+        willYouAttend: 'هل ستكونون بيننا؟',
+        accepts: 'بكل سرور وسعادة',
+        declines: 'مع الأسف لن أتمكن',
+        guestsLabel: 'الضيوف الحاضرون',
+        addGuest: '+ إضافة ضيف آخر',
+        guestPlaceholder: 'اسم الضيف {n}',
+        sendRsvp: 'إرسال التأكيد',
+        sending: 'جاري الإرسال\u2026',
+        thankYouTitle: 'شكراً جزيلاً!',
+        thankYouYes: 'يسعدنا احتفالكم معنا!',
+        thankYouYesPlural: 'يسعدنا احتفالكم وضيوفكم معنا!',
+        thankYouNo: 'نتمنى لو أمكن الاحتفال معاً. ستكون غيابكم ملموساً!',
+        errName: 'يرجى إدخال اسمك.',
+        errAttending: 'يرجى إخبارنا ما إذا كنت ستحضر.',
+        errGuestName: 'يرجى إدخال اسم ضيف واحد على الأقل.',
+        errNetwork: 'خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مجدداً.',
+        errGeneric: 'حدث خطأ ما. يرجى المحاولة مجدداً.',
+      },
+    };
+
+    let currentLang = 'en';
+
+    function applyLanguage(lang) {
+      const t = i18n[lang];
+      if (!t) return;
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = t.dir;
+      document.title = t.pageTitle;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      // Renumber dynamic guest rows with correct language
+      guestList.querySelectorAll('.guest-name-row').forEach((row, i) => {
+        if (i === 0) return;
+        const input = row.querySelector('input');
+        if (input) input.placeholder = t.guestPlaceholder.replace('{n}', i + 1);
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+
+    // ── DOM refs ────────────────────────────────────────────────────────────
+    const form = document.getElementById('rsvp-form');
+    const submitterInput = document.getElementById('submitter-name');
+    const guestFields = document.getElementById('guest-fields');
+    const guestList = document.getElementById('guest-list');
+    const btnAddGuest = document.getElementById('btn-add-guest');
+    const errorMsg = document.getElementById('error-msg');
+    const btnSubmit = document.getElementById('btn-submit');
+    const thankYou = document.getElementById('thank-you');
+    const thankYouMsg = document.getElementById('thank-you-msg');
+
+    const MAX_GUESTS = 25;
+
+    // ── Language switcher ────────────────────────────────────────────────────
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+    });
+
+    // ── Form validity ────────────────────────────────────────────────────────
+    function checkFormValidity() {
+      const hasName = submitterInput.value.trim().length > 0;
+      const hasAttending = !!document.querySelector('input[name="attending"]:checked');
+      btnSubmit.disabled = !(hasName && hasAttending);
+    }
+
+    // ── Attending radio change ───────────────────────────────────────────────
+    document.querySelectorAll('input[name="attending"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'yes') {
+          guestFields.classList.add('visible');
+          syncSubmitterToFirstGuest();
+        } else {
+          guestFields.classList.remove('visible');
+        }
+        clearError();
+        checkFormValidity();
+      });
+    });
+
+    // ── Mirror submitter name into first guest slot ──────────────────────────
+    submitterInput.addEventListener('input', () => {
+      syncSubmitterToFirstGuest();
+      checkFormValidity();
+    });
+
+    function syncSubmitterToFirstGuest() {
+      const firstGuest = document.getElementById('guest-0');
+      if (firstGuest) firstGuest.value = submitterInput.value.trim();
+    }
+
+    // ── Add guest row ────────────────────────────────────────────────────────
+    btnAddGuest.addEventListener('click', () => {
+      const currentRows = guestList.querySelectorAll('.guest-name-row');
+      if (currentRows.length >= MAX_GUESTS) return;
+
+      const idx = currentRows.length;
+      const t = i18n[currentLang];
+      const row = document.createElement('div');
+      row.className = 'guest-name-row';
+      row.dataset.index = idx;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.id = `guest-${idx}`;
+      input.placeholder = t.guestPlaceholder.replace('{n}', idx + 1);
+      input.setAttribute('aria-label', `Guest ${idx + 1}`);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn-remove-guest';
+      removeBtn.title = 'Remove guest';
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', () => {
+        row.remove();
+        renumberGuests();
+        updateAddButton();
+      });
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      guestList.appendChild(row);
+      input.focus();
+
+      updateAddButton();
+    });
+
+    function renumberGuests() {
+      const t = i18n[currentLang];
+      guestList.querySelectorAll('.guest-name-row').forEach((row, i) => {
+        const input = row.querySelector('input');
+        input.id = `guest-${i}`;
+        input.setAttribute('aria-label', `Guest ${i + 1}`);
+        if (i > 0) input.placeholder = t.guestPlaceholder.replace('{n}', i + 1);
+        row.dataset.index = i;
+      });
+    }
+
+    function updateAddButton() {
+      const count = guestList.querySelectorAll('.guest-name-row').length;
+      btnAddGuest.disabled = count >= MAX_GUESTS;
+      btnAddGuest.style.opacity = count >= MAX_GUESTS ? '0.4' : '1';
+    }
+
+    // ── Error helpers ────────────────────────────────────────────────────────
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.add('visible');
+    }
+
+    function clearError() {
+      errorMsg.textContent = '';
+      errorMsg.classList.remove('visible');
+    }
+
+    // ── Form submit ──────────────────────────────────────────────────────────
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+      const t = i18n[currentLang];
+
+      const submitterName = submitterInput.value.trim();
+      if (!submitterName) {
+        showError(t.errName);
+        submitterInput.focus();
+        return;
+      }
+
+      const attendingRadio = document.querySelector('input[name="attending"]:checked');
+      if (!attendingRadio) {
+        showError(t.errAttending);
+        return;
+      }
+
+      const attending = attendingRadio.value === 'yes';
+      let names;
+
+      if (attending) {
+        names = Array.from(guestList.querySelectorAll('input'))
+          .map(i => i.value.trim())
+          .filter(v => v.length > 0);
+
+        if (names.length === 0) {
+          showError(t.errGuestName);
+          return;
+        }
+      } else {
+        names = [submitterName];
+      }
+
+      const added_by = crypto.randomUUID();
+
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = t.sending;
+
+      try {
+        const res = await fetch('/api/rsvp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attending, added_by, names }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.error || t.errGeneric);
+          checkFormValidity();
+          btnSubmit.textContent = t.sendRsvp;
+          return;
+        }
+
+        // Show thank-you
+        form.style.display = 'none';
+        thankYouMsg.textContent = attending
+          ? (names.length > 1 ? t.thankYouYesPlural : t.thankYouYes)
+          : t.thankYouNo;
+        thankYou.classList.add('visible');
+
+      } catch {
+        showError(t.errNetwork);
+        checkFormValidity();
+        btnSubmit.textContent = t.sendRsvp;
+      }
+    });
+  </script>
+</body>
+</html>
