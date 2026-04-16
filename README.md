@@ -24,7 +24,7 @@ ADMIN_PASSWORD="your-admin-password"
 Start the dev server (Vercel CLI handles the API functions locally):
 
 ```bash
-npx vercel dev
+npx vercel dev --local
 ```
 
 Open [http://localhost:3000](http://localhost:3000) for the RSVP page and [http://localhost:3000/admin.html](http://localhost:3000/admin.html) for the admin report.

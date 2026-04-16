@@ -6,8 +6,134 @@
   <title>Admin — RSVP Report</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Summary card interactive ── */
+    .summary-stat {
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .summary-stat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(28, 26, 20, 0.16);
+      border-color: var(--accent);
+    }
+    .summary-stat.filter-active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    /* ── Numbers: clean sans-serif, not fancy serif ── */
+    .summary-stat .number {
+      font-family: 'Inter', 'Lato', system-ui, sans-serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      color: var(--accent-hover);
+    }
+    /* ── Table controls row ── */
+    .table-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      background: var(--warm-white);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 146, 80, 0.15);
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+    .btn-export {
+      padding: 0.55rem 1.1rem;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s;
+      letter-spacing: 0.03em;
+      margin: 1rem 0;
+    }
+    .btn-export:hover {
+      border-color: var(--accent);
+      color: var(--accent-hover);
+      background: var(--accent-light);
+    }
+    /* ── Sortable headers ── */
+    .guest-table th.sortable {
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .guest-table th.sortable:hover { background: #ece4c7; }
+    .sort-icon {
+      display: inline-block;
+      width: 1em;
+      opacity: 0.45;
+      font-size: 0.7em;
+    }
+    .guest-table th.sorted .sort-icon { opacity: 1; }
+    /* ── Active filter banner ── */
+    .filter-banner {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--accent-hover);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .filter-banner.visible { display: flex; }
+    .filter-banner button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+    .filter-banner button:hover { color: var(--error); }
+    /* ── Empty state ── */
+    .table-empty {
+      display: none;
+      text-align: center;
+      color: var(--text-muted);
+      padding: 2rem;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+    /* ── Action buttons ── */
+    .action-row {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .action-row .btn-submit { width: auto; padding: 0.6rem 1.5rem; }
+    .action-row .btn-logout { background: var(--text-muted); }
+  </style>
 </head>
 <body>
   <div class="page-wrapper">
@@ -40,43 +166,61 @@
     <!-- Report (hidden until authenticated) -->
     <div id="report-section" style="display:none;">
 
-      <!-- Summary -->
+      <!-- Summary cards — click to filter the table -->
       <div class="summary-grid">
-        <div class="summary-stat">
+        <div class="summary-stat" id="stat-card-attending" data-filter="attending" role="button" tabindex="0" title="Click to show attending only">
           <div class="number" id="stat-attending">—</div>
           <div class="label">Attending</div>
         </div>
-        <div class="summary-stat">
+        <div class="summary-stat" id="stat-card-declined" data-filter="declined" role="button" tabindex="0" title="Click to show declined only">
           <div class="number" id="stat-declined">—</div>
           <div class="label">Declined</div>
         </div>
-        <div class="summary-stat">
+        <div class="summary-stat" id="stat-card-submissions" data-filter="all" role="button" tabindex="0" title="Click to show all responses">
           <div class="number" id="stat-submissions">—</div>
           <div class="label">Submissions</div>
         </div>
       </div>
 
-      <!-- Full guest list -->
+      <!-- Guest list -->
       <h2 class="section-title">All Responses</h2>
-      <div class="guest-table-wrapper">
-        <table class="guest-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Attending</th>
-              <th>Submitted By</th>
-              <th>Date &amp; Time</th>
-            </tr>
-          </thead>
-          <tbody id="guest-tbody">
-          </tbody>
-        </table>
+
+      <div class="filter-banner" id="filter-banner">
+        <span id="filter-banner-text"></span>
+        <button id="filter-clear-btn">Clear filter ×</button>
       </div>
 
-      <div style="margin-top:1.5rem; text-align:right;">
-        <button class="btn-submit" id="btn-refresh" style="width:auto;padding:0.6rem 1.5rem;">Refresh</button>
-        <button class="btn-submit" id="btn-logout" style="width:auto;padding:0.6rem 1.5rem;margin-left:0.5rem;background:var(--text-muted);">Log Out</button>
+      <div class="table-controls">
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Search by name or submitter…"
+          aria-label="Search guests"
+        />
+      </div>
+
+      <div class="guest-table-wrapper">
+        <table class="guest-table" aria-label="Guest responses">
+          <thead>
+            <tr>
+              <th data-col="0">#</th>
+              <th data-col="1" class="sortable">Name <span class="sort-icon" aria-hidden="true"></span></th>
+              <th data-col="2" class="sortable">Attending <span class="sort-icon" aria-hidden="true"></span></th>
+              <th data-col="3" class="sortable">Submitted By <span class="sort-icon" aria-hidden="true"></span></th>
+              <th data-col="4" class="sortable sorted">Date &amp; Time <span class="sort-icon" aria-hidden="true">▼</span></th>
+            </tr>
+          </thead>
+          <tbody id="guest-tbody"></tbody>
+        </table>
+        <p class="table-empty" id="table-empty">No matching results.</p>
+      </div>
+
+      <button class="btn-export" id="btn-export">↓ Export CSV</button>
+      <div class="action-row">
+        
+        <button class="btn-submit" id="btn-refresh">Refresh</button>
+        <button class="btn-submit btn-logout" id="btn-logout">Log Out</button>
       </div>
 
     </div>
@@ -84,15 +228,27 @@
   </div>
 
   <script>
-    const loginSection = document.getElementById('login-section');
-    const reportSection = document.getElementById('report-section');
-    const loginForm = document.getElementById('login-form');
-    const loginError = document.getElementById('login-error');
-    const btnLogin = document.getElementById('btn-login');
-    const btnRefresh = document.getElementById('btn-refresh');
-    const btnLogout = document.getElementById('btn-logout');
+    const loginSection     = document.getElementById('login-section');
+    const reportSection    = document.getElementById('report-section');
+    const loginForm        = document.getElementById('login-form');
+    const loginError       = document.getElementById('login-error');
+    const btnLogin         = document.getElementById('btn-login');
+    const btnRefresh       = document.getElementById('btn-refresh');
+    const btnLogout        = document.getElementById('btn-logout');
+    const btnExport        = document.getElementById('btn-export');
+    const searchInput      = document.getElementById('search-input');
+    const filterBanner     = document.getElementById('filter-banner');
+    const filterBannerText = document.getElementById('filter-banner-text');
+    const filterClearBtn   = document.getElementById('filter-clear-btn');
+    const tableEmpty       = document.getElementById('table-empty');
 
     let currentPassword = '';
+    let allGuests       = [];
+    let submitterMap    = {};   // added_by → first_name
+    let activeFilter    = null; // null | 'attending' | 'declined'
+    let sortCol         = 4;    // default: date column
+    let sortDir         = 'desc';
+    let searchTerm      = '';
 
     // ── Login ───────────────────────────────────────────────────────────────
     loginForm.addEventListener('submit', async (e) => {
@@ -107,7 +263,6 @@
       btnLogin.textContent = 'Loading…';
 
       const ok = await fetchReport(password);
-
       if (!ok) {
         loginError.textContent = 'Incorrect password or failed to load report.';
         loginError.classList.add('visible');
@@ -129,6 +284,114 @@
       document.getElementById('admin-password').value = '';
       reportSection.style.display = 'none';
       loginSection.style.display = 'block';
+      activeFilter = null;
+      searchTerm = '';
+      searchInput.value = '';
+    });
+
+    // ── Card filtering ───────────────────────────────────────────────────────
+    ['attending', 'declined', 'submissions'].forEach(filter => {
+      const card = document.getElementById(`stat-card-${filter}`);
+      if (!card) return;
+      const activate = () => {
+        if (filter === 'submissions') {
+          activeFilter = null;
+        } else if (activeFilter === filter) {
+          activeFilter = null; // toggle off
+        } else {
+          activeFilter = filter;
+        }
+        updateCardStates();
+        renderTable();
+      };
+      card.addEventListener('click', activate);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+      });
+    });
+
+    filterClearBtn.addEventListener('click', () => {
+      activeFilter = null;
+      updateCardStates();
+      renderTable();
+    });
+
+    function updateCardStates() {
+      ['attending', 'declined'].forEach(f => {
+        document.getElementById(`stat-card-${f}`)
+          .classList.toggle('filter-active', activeFilter === f);
+      });
+      if (activeFilter) {
+        filterBannerText.textContent = `Showing: ${activeFilter === 'attending' ? 'Attending' : 'Declined'} only`;
+        filterBanner.classList.add('visible');
+      } else {
+        filterBanner.classList.remove('visible');
+      }
+    }
+
+    // ── Sorting ──────────────────────────────────────────────────────────────
+    document.querySelectorAll('.guest-table th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = parseInt(th.dataset.col, 10);
+        if (sortCol === col) {
+          sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortCol = col;
+          sortDir = 'asc';
+        }
+        updateSortIcons();
+        renderTable();
+      });
+    });
+
+    function updateSortIcons() {
+      document.querySelectorAll('.guest-table th.sortable').forEach(th => {
+        const col = parseInt(th.dataset.col, 10);
+        const icon = th.querySelector('.sort-icon');
+        if (col === sortCol) {
+          th.classList.add('sorted');
+          icon.textContent = sortDir === 'asc' ? '▲' : '▼';
+        } else {
+          th.classList.remove('sorted');
+          icon.textContent = '';
+        }
+      });
+    }
+
+    // ── Search ───────────────────────────────────────────────────────────────
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      renderTable();
+    });
+
+    // ── CSV Export ───────────────────────────────────────────────────────────
+    btnExport.addEventListener('click', () => {
+      const guests = getFilteredSortedGuests();
+      const rows = [['#', 'Name', 'Attending', 'Submitted By', 'Date', 'Time']];
+      guests.forEach((guest, i) => {
+        const at = new Date(guest.submitted_at);
+        const dateStr = at.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = at.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        const sub = submitterMap[guest.added_by] || '';
+        rows.push([
+          i + 1,
+          guest.name,
+          guest.attending ? 'Yes' : 'No',
+          guest.name === sub ? 'self' : (sub || '—'),
+          dateStr,
+          timeStr
+        ]);
+      });
+      const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rsvp-report-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     });
 
     // ── Fetch & render ──────────────────────────────────────────────────────
@@ -137,68 +400,97 @@
         const params = new URLSearchParams({ password });
         const res = await fetch(`/api/admin?${params}`);
         if (!res.ok) return false;
-
         const data = await res.json();
-        renderReport(data);
+        loadReport(data);
         return true;
       } catch {
         return false;
       }
     }
 
-    function renderReport(data) {
+    function loadReport(data) {
       const { guests, submissions } = data;
+      allGuests = guests;
 
-      // Compute summary
-      const attending = guests.filter(g => g.attending).length;
-      const declined = guests.filter(g => !g.attending).length;
+      submitterMap = {};
+      submissions.forEach(sub => { submitterMap[sub.added_by] = sub.first_name; });
 
-      document.getElementById('stat-attending').textContent = attending;
-      document.getElementById('stat-declined').textContent = declined;
+      const attendingCount = guests.filter(g => g.attending).length;
+      document.getElementById('stat-attending').textContent   = attendingCount;
+      document.getElementById('stat-declined').textContent    = guests.length - attendingCount;
       document.getElementById('stat-submissions').textContent = submissions.length;
 
-      // Build table — group rows by submission for visual clarity
+      // Reset state on each load
+      activeFilter = null;
+      sortCol = 4;
+      sortDir = 'desc';
+      searchInput.value = '';
+      searchTerm = '';
+      updateCardStates();
+      updateSortIcons();
+      renderTable();
+    }
+
+    function getFilteredSortedGuests() {
+      let result = [...allGuests];
+
+      if (activeFilter === 'attending') result = result.filter(g => g.attending);
+      if (activeFilter === 'declined')  result = result.filter(g => !g.attending);
+
+      if (searchTerm) {
+        result = result.filter(g => {
+          const name = g.name.toLowerCase();
+          const sub  = (submitterMap[g.added_by] || '').toLowerCase();
+          return name.includes(searchTerm) || sub.includes(searchTerm);
+        });
+      }
+
+      result.sort((a, b) => {
+        let av, bv;
+        switch (sortCol) {
+          case 1: av = a.name.toLowerCase(); bv = b.name.toLowerCase(); break;
+          case 2: av = a.attending ? 1 : 0;  bv = b.attending ? 1 : 0;  break;
+          case 3:
+            av = (submitterMap[a.added_by] || '').toLowerCase();
+            bv = (submitterMap[b.added_by] || '').toLowerCase();
+            break;
+          case 4:
+          default:
+            av = new Date(a.submitted_at).getTime();
+            bv = new Date(b.submitted_at).getTime();
+            break;
+        }
+        if (av < bv) return sortDir === 'asc' ? -1 : 1;
+        if (av > bv) return sortDir === 'asc' ?  1 : -1;
+        return 0;
+      });
+
+      return result;
+    }
+
+    function renderTable() {
+      const guests = getFilteredSortedGuests();
       const tbody = document.getElementById('guest-tbody');
       tbody.innerHTML = '';
 
-      let rowNum = 0;
+      tableEmpty.style.display = guests.length === 0 ? 'block' : 'none';
 
-      // Map submission id → submitter's primary name (first name in that group)
-      const submitterMap = {};
-      submissions.forEach(sub => {
-        submitterMap[sub.added_by] = sub.first_name;
-      });
-
-      guests.forEach(guest => {
-        rowNum++;
+      guests.forEach((guest, i) => {
         const tr = document.createElement('tr');
-
-        const submittedAt = new Date(guest.submitted_at);
-        const dateStr = submittedAt.toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric'
-        });
-        const timeStr = submittedAt.toLocaleTimeString('en-US', {
-          hour: 'numeric', minute: '2-digit'
-        });
-
-        const submitterName = submitterMap[guest.added_by] || '—';
-        const isSelf = guest.name === submitterName;
-
+        const at = new Date(guest.submitted_at);
+        const dateStr = at.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = at.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        const subName = submitterMap[guest.added_by] || '—';
+        const isSelf  = guest.name === subName;
         tr.innerHTML = `
-          <td style="color:var(--text-muted);font-size:0.8rem;">${rowNum}</td>
+          <td style="color:var(--text-muted);font-size:0.8rem;font-variant-numeric:tabular-nums;">${i + 1}</td>
           <td>${escHtml(guest.name)}</td>
           <td><span class="badge ${guest.attending ? 'yes' : 'no'}">${guest.attending ? 'Yes' : 'No'}</span></td>
-          <td style="color:var(--text-muted);font-size:0.85rem;">${isSelf ? '<em>self</em>' : escHtml(submitterName)}</td>
-          <td style="color:var(--text-muted);font-size:0.8rem;">${dateStr}, ${timeStr}</td>
+          <td style="color:var(--text-muted);font-size:0.85rem;">${isSelf ? '<em>self</em>' : escHtml(subName)}</td>
+          <td style="color:var(--text-muted);font-size:0.8rem;font-variant-numeric:tabular-nums;">${dateStr}, ${timeStr}</td>
         `;
         tbody.appendChild(tr);
       });
-
-      if (guests.length === 0) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">No responses yet.</td>';
-        tbody.appendChild(tr);
-      }
     }
 
     function escHtml(str) {
