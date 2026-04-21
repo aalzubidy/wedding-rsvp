@@ -27,8 +27,9 @@ Plan file is plan.md `plan.md`, read it for more details.
 - `api/admin.js` — GET endpoint: returns all rows as JSON (password-gated)
 
 ## Database
-Single table `guests` with columns: `id`, `submitted_at`, `name`, `attending`, `added_by`.
+Single table `guests` with columns: `id`, `submitted_at`, `name`, `attending`, `added_by`, `ip_address`, `city`, `country`.
 One row per person. For a group RSVP, multiple rows share the same `added_by`.
+`ip_address`, `city`, and `country` are best-effort (nullable) — collected silently from the request IP.
 
 ## Environment Variables (set in Vercel dashboard)
 - `POSTGRES_URL` — auto-set by the Neon integration
