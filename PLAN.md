@@ -36,13 +36,18 @@ wedding-rsvp/
 ## DB Schema
 ```sql
 CREATE TABLE IF NOT EXISTS guests (
-  id SERIAL PRIMARY KEY,
+  id           SERIAL PRIMARY KEY,
   submitted_at TIMESTAMPTZ DEFAULT NOW(),
-  name TEXT NOT NULL,
-  attending BOOLEAN NOT NULL,
-  added_by TEXT NOT NULL  -- name of the person who submitted the form
+  name         TEXT NOT NULL,
+  attending    BOOLEAN NOT NULL,
+  added_by     TEXT NOT NULL,  -- UUID of the person who submitted the form
+  ip_address   TEXT,           -- best-effort, nullable
+  city         TEXT,           -- best-effort via ip-api.com, nullable
+  country      TEXT            -- best-effort via ip-api.com, nullable
 );
 ```
+
+> **Note:** `ip_address`, `city`, and `country` are collected silently at submission time using the requester's IP and a free geo-lookup (ip-api.com). All three default to `NULL` if lookup fails — this never blocks or fails a submission.
 
 ### How rows are written
 - Yes RSVP by "Alice" with party [Alice, Bob, Carol]:

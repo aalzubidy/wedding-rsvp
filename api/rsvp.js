@@ -47,25 +47,47 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Exactly one name is required when declining.' });
   }
 
+  // Best-effort IP geolocation — never blocks or fails the submission
+  let ip_address = null;
+  let city = null;
+  let country = null;
+  try {
+    const raw = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || null;
+    ip_address = raw ? raw.split(',')[0].trim() : null;
+    if (ip_address) {
+      const geo = await fetch(`https://ip-api.com/json/${ip_address}?fields=city,country`);
+      if (geo.ok) {
+        const data = await geo.json();
+        city = data.city || null;
+        country = data.country || null;
+      }
+    }
+  } catch {
+    // silently ignore geo errors
+  }
+
   const sql = neon(process.env.POSTGRES_URL);
 
   try {
     // Ensure table exists
     await sql`
       CREATE TABLE IF NOT EXISTS guests (
-        id          SERIAL PRIMARY KEY,
+        id           SERIAL PRIMARY KEY,
         submitted_at TIMESTAMPTZ DEFAULT NOW(),
-        name        TEXT NOT NULL,
-        attending   BOOLEAN NOT NULL,
-        added_by    TEXT NOT NULL
+        name         TEXT NOT NULL,
+        attending    BOOLEAN NOT NULL,
+        added_by     TEXT NOT NULL,
+        ip_address   TEXT,
+        city         TEXT,
+        country      TEXT
       )
     `;
 
     // Insert one row per name
     for (const name of cleanNames) {
       await sql`
-        INSERT INTO guests (name, attending, added_by)
-        VALUES (${name}, ${attending}, ${added_by})
+        INSERT INTO guests (name, attending, added_by, ip_address, city, country)
+        VALUES (${name}, ${attending}, ${added_by}, ${ip_address}, ${city}, ${country})
       `;
     }
 
