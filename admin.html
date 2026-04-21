@@ -209,6 +209,8 @@
               <th data-col="2" class="sortable">Attending <span class="sort-icon" aria-hidden="true"></span></th>
               <th data-col="3" class="sortable">Submitted By <span class="sort-icon" aria-hidden="true"></span></th>
               <th data-col="4" class="sortable sorted">Date &amp; Time <span class="sort-icon" aria-hidden="true">▼</span></th>
+              <th data-col="5">City</th>
+              <th data-col="6">Country</th>
             </tr>
           </thead>
           <tbody id="guest-tbody"></tbody>
@@ -367,7 +369,7 @@
     // ── CSV Export ───────────────────────────────────────────────────────────
     btnExport.addEventListener('click', () => {
       const guests = getFilteredSortedGuests();
-      const rows = [['#', 'Name', 'Attending', 'Submitted By', 'Date', 'Time']];
+        const rows = [['#', 'Name', 'Attending', 'Submitted By', 'Date', 'Time', 'City', 'Country']];
       guests.forEach((guest, i) => {
         const at = new Date(guest.submitted_at);
         const dateStr = at.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -379,7 +381,9 @@
           guest.attending ? 'Yes' : 'No',
           guest.name === sub ? 'self' : (sub || '—'),
           dateStr,
-          timeStr
+          timeStr,
+          guest.city || '',
+          guest.country || ''
         ]);
       });
       const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -439,9 +443,12 @@
 
       if (searchTerm) {
         result = result.filter(g => {
-          const name = g.name.toLowerCase();
-          const sub  = (submitterMap[g.added_by] || '').toLowerCase();
-          return name.includes(searchTerm) || sub.includes(searchTerm);
+          const name    = g.name.toLowerCase();
+          const sub     = (submitterMap[g.added_by] || '').toLowerCase();
+          const city    = (g.city || '').toLowerCase();
+          const country = (g.country || '').toLowerCase();
+          return name.includes(searchTerm) || sub.includes(searchTerm)
+            || city.includes(searchTerm) || country.includes(searchTerm);
         });
       }
 
@@ -488,6 +495,8 @@
           <td><span class="badge ${guest.attending ? 'yes' : 'no'}">${guest.attending ? 'Yes' : 'No'}</span></td>
           <td style="color:var(--text-muted);font-size:0.85rem;">${isSelf ? '<em>self</em>' : escHtml(subName)}</td>
           <td style="color:var(--text-muted);font-size:0.8rem;font-variant-numeric:tabular-nums;">${dateStr}, ${timeStr}</td>
+          <td style="color:var(--text-muted);font-size:0.85rem;">${guest.city ? escHtml(guest.city) : '<span style="opacity:0.4">—</span>'}</td>
+          <td style="color:var(--text-muted);font-size:0.85rem;">${guest.country ? escHtml(guest.country) : '<span style="opacity:0.4">—</span>'}</td>
         `;
         tbody.appendChild(tr);
       });
