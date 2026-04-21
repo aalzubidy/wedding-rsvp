@@ -55,7 +55,7 @@ module.exports = async function handler(req, res) {
     const raw = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || null;
     ip_address = raw ? raw.split(',')[0].trim() : null;
     if (ip_address) {
-      const geo = await fetch(`https://ip-api.com/json/${ip_address}?fields=city,country`);
+      const geo = await fetch(`https://ipinfo.io/${ip_address}/json`);
       if (geo.ok) {
         const data = await geo.json();
         city = data.city || null;
