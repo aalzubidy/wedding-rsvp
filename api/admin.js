@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
   try {
     // Fetch all guests ordered by submission time
     const guests = await sql`
-      SELECT id, submitted_at, name, attending, added_by
+      SELECT id, submitted_at, name, attending, added_by, ip_address, city, country
       FROM guests
       ORDER BY submitted_at ASC
     `;
