@@ -33,7 +33,6 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* Arabic font override */
@@ -57,18 +56,18 @@ h1, h2, h3 {
   line-height: 1.2;
 }
 
-h1 { font-size: 3.2rem; letter-spacing: 0.04em; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.4rem; }
+h1 { font-size: clamp(2rem, 8vw, 3.2rem); letter-spacing: 0.04em; }
+h2 { font-size: clamp(1.5rem, 5vw, 2rem); }
+h3 { font-size: clamp(1.2rem, 3.5vw, 1.4rem); }
 
 /* ============================================================
    Layout
    ============================================================ */
 .page-wrapper {
   max-width: 680px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0.5rem 1rem 1rem;
-  overflow-x: clip;
+  padding: 0.75rem 1rem 3rem;
 }
 
 /* ============================================================
@@ -76,7 +75,7 @@ h3 { font-size: 1.4rem; }
    ============================================================ */
 .hero {
   text-align: center;
-  padding: 0.5rem 0.5rem 0.5rem;
+  padding: 1.25rem 0.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 2.5rem;
   background: linear-gradient(160deg, rgba(245, 238, 216, 0.35), transparent 70%);
@@ -132,13 +131,13 @@ h3 { font-size: 1.4rem; }
   background: var(--warm-white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 2.5rem;
+  padding: 1.25rem 1rem;
   box-shadow: var(--shadow), inset 0 0 0 5px rgba(184, 146, 80, 0.06);
 }
 
 .card-title {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 1.7rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.7rem);
   font-weight: 400;
   margin-bottom: 0.5rem;
   color: var(--accent-hover);
@@ -196,7 +195,8 @@ input[type="password"]:focus {
 /* Radio group */
 .radio-group {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.6rem;
   margin-top: 0.25rem;
 }
 
@@ -434,7 +434,7 @@ input[type="password"]:focus {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -537,13 +537,13 @@ input[type="password"]:focus {
 .lang-switcher {
   display: flex;
   gap: 0.4rem;
-  justify-content: flex-end;
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
 [dir="rtl"] .lang-switcher {
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .lang-btn {
@@ -574,28 +574,14 @@ input[type="password"]:focus {
 }
 
 /* ============================================================
-   Responsive — Mobile
+   Responsive — Desktop enhancements (mobile-first base above)
    ============================================================ */
-@media (max-width: 768px) {
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.6rem; }
-  .couple-names { font-size: 2.4rem; }
-  .card { padding: 1.25rem 1rem; }
-  .card-message { font-size: 0.9rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; }
-  .card-title { font-size: 1.5rem; }
-  .summary-grid { grid-template-columns: repeat(2, 1fr); }
-  .page-wrapper { padding: 0.75rem 0.75rem 3rem; }
-  .hero { padding: 1.25rem 0.5rem 1.25rem; }
-  .hero .event-details { font-size: 0.875rem; gap: 0.2rem; margin-top: 1rem; }
-  .radio-group { flex-direction: column; gap: 0.6rem; }
-  .radio-option label { padding: 0.65rem 0.75rem; font-size: 0.8rem; }
-  .lang-switcher { justify-content: center; margin-bottom: 1rem; gap: 0.3rem; }
-  [dir="rtl"] .lang-switcher { justify-content: center; }
-  .divider { margin: 1.25rem 0; font-size: 1.2rem; }
-  .form-group { margin-bottom: 1rem; }
-  label { font-size: 0.8rem; }
-  input[type="text"], input[type="password"] { font-size: 1rem; padding: 0.6rem 0.75rem; }
-  .btn-submit { padding: 0.8rem 1.5rem; font-size: 0.85rem; margin-top: 1.25rem; }
-  .btn-add-guest { font-size: 0.8rem; padding: 0.45rem 0.75rem; }
-  .guest-fields { margin-top: 1.25rem; padding-top: 1.25rem; }
+@media (min-width: 600px) {
+  .page-wrapper { padding: 0.5rem 1rem 1rem; }
+  .hero { padding: 0.5rem 0.5rem; }
+  .card { padding: 2.5rem; }
+  .radio-group { flex-direction: row; gap: 1rem; }
+  .lang-switcher { justify-content: flex-end; margin-bottom: 1.5rem; }
+  [dir="rtl"] .lang-switcher { justify-content: flex-start; }
+  .summary-grid { grid-template-columns: repeat(3, 1fr); }
 }
