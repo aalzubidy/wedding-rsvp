@@ -56,6 +56,11 @@ h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
    ============================================================ */
 .rsvp-container {
   max-width: 680px;
+  /* container queries: respond to this element's width, not the viewport.
+     This is essential when the page is embedded in an iframe, where the
+     viewport meta tag may be ignored and @media queries never trigger. */
+  container-type: inline-size;
+  container-name: rsvp;
 }
 
 /* ============================================================
@@ -501,9 +506,10 @@ h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
 }
 
 /* ============================================================
-   Mobile (≤ 480px)
+   Mobile (≤ 480px) — container query (works inside iframes)
+   Supported: Chrome 105+, Safari 16+, Firefox 110+
    ============================================================ */
-@media (max-width: 480px) {
+@container rsvp (max-width: 480px) {
   .rsvp-container {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
@@ -518,6 +524,41 @@ h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
   }
 
   /* Stack radio buttons vertically on very narrow screens */
+  .radio-option {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .radio-option label {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .btn-submit {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .lang-btn {
+    font-size: 0.72rem;
+    padding: 0.28rem 0.65rem;
+  }
+}
+
+/* Fallback @media query for browsers without container query support */
+@media (max-width: 480px) {
+  .rsvp-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .rsvp-card .card-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .hero {
+    padding: 1.25rem 0.75rem;
+  }
+
   .radio-option {
     min-width: 0;
     width: 100%;
