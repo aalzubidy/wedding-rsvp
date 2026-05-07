@@ -242,7 +242,10 @@
 
     // ── Language switcher ────────────────────────────────────────────────────
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      btn.addEventListener('click', () => {
+        localStorage.setItem('rsvp-lang', btn.dataset.lang);
+        applyLanguage(btn.dataset.lang);
+      });
     });
 
     // ── Form validity ────────────────────────────────────────────────────────
@@ -410,6 +413,34 @@
         btnSubmit.textContent = t.sendRsvp;
       }
     });
+
+    // ── Geo-based language detection ─────────────────────────────────────────
+    const FRENCH_COUNTRIES = ['FR', 'TN', 'MA'];
+    const ARABIC_COUNTRIES = ['IQ', 'JO'];
+
+    async function detectDefaultLanguage() {
+      // Respect the user's manual choice if they've already switched
+      const stored = localStorage.getItem('rsvp-lang');
+      if (stored && i18n[stored]) return stored;
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 3000);
+        const res = await fetch('https://ipapi.co/country/', { signal: controller.signal });
+        clearTimeout(timer);
+        if (res.ok) {
+          const country = (await res.text()).trim().toUpperCase();
+          if (FRENCH_COUNTRIES.includes(country)) return 'fr';
+          if (ARABIC_COUNTRIES.includes(country)) return 'ar';
+        }
+      } catch {
+        // Network error or timeout — fall back to English
+      }
+      return 'en';
+    }
+
+    // Apply detected language on load
+    detectDefaultLanguage().then(lang => applyLanguage(lang));
   </script>
 </body>
 </html>
