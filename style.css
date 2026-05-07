@@ -156,7 +156,7 @@ h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
   padding: 1.5rem;
 }
 
-.card-title {
+.rsvp-card-title {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
   font-size: clamp(1.4rem, 4.5vw, 1.7rem);
   font-weight: 400;

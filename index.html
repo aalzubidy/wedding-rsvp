@@ -35,7 +35,7 @@
     <!-- RSVP Card -->
     <div class="card rsvp-card" id="rsvp-card">
       <div class="card-body">
-        <h2 class="card-title" data-i18n="cardTitle">Kindly Reply</h2>
+        <h2 class="rsvp-card-title" data-i18n="cardTitle">Kindly Reply</h2>
         <p class="card-message" data-i18n="cardMessage">We joyfully invite you to share our special day. Please let us know if you'll be celebrating with us.</p>
 
         <form id="rsvp-form" novalidate>
@@ -297,6 +297,7 @@
 
       const input = document.createElement('input');
       input.type = 'text';
+      input.className = 'form-control rsvp-input';
       input.id = `guest-${idx}`;
       input.placeholder = t.guestPlaceholder.replace('{n}', idx + 1);
       input.setAttribute('aria-label', `Guest ${idx + 1}`);
