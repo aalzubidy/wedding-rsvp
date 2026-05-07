@@ -25,6 +25,7 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 [dir="rtl"] {
@@ -497,4 +498,42 @@ h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
   font-weight: 400;
   color: var(--text-dark);
   margin-bottom: 1rem;
+}
+
+/* ============================================================
+   Mobile (≤ 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .rsvp-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .rsvp-card .card-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .hero {
+    padding: 1.25rem 0.75rem;
+  }
+
+  /* Stack radio buttons vertically on very narrow screens */
+  .radio-option {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .radio-option label {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .btn-submit {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .lang-btn {
+    font-size: 0.72rem;
+    padding: 0.28rem 0.65rem;
+  }
 }
