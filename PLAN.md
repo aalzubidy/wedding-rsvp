@@ -115,16 +115,18 @@ The site is embedded in a Cloudflare-hosted iframe. In that context:
 Rewrite `style.css` to be **truly mobile-first with fixed sizing**. The site is a simple single-column form with no desktop-specific layout, so a single design works for all screen sizes:
 
 1. **Replace all viewport-relative sizing** — Remove all `clamp()` with `vw` units. Use fixed `rem`/`px` values sized for ~375px phone screens (but readable at any width).
-2. **Container fills available space** — Remove the hard `max-width: 680px` cap. Let the container naturally fill the iframe/viewport with generous padding.
+2. **Container fills available space** — Remove the hard `max-width: 680px` cap. Let the container naturally fill the iframe/viewport with generous padding. Override Bootstrap's responsive `max-width` with `max-width: 100% !important`.
 3. **Mobile-first container query strategy** — Use `@container` queries only to **widen** spacing on larger screens (the opposite of current approach).
-4. **Typography** — Fixed `rem` sizes: body `1rem`, headings scaled with `rem`, labels `0.875rem` minimum.
+4. **Larger typography** — Body font `1.125rem`, headings `2.6rem`/`1.8rem`, labels `0.875rem`. All fixed `rem` sizes.
 5. **Touch-friendly targets** — All interactive elements at least `44px` tall, generous padding on inputs and buttons.
 6. **Radio buttons always stacked** — Vertical stack works at all widths, no side-by-side needed.
-7. **Admin table** — Already has `overflow-x: auto`; ensure search/export work on narrow screens.
+7. **Auto-scale JavaScript** — Detects iframe/screen width mismatch (`window.innerWidth > screen.width * 1.3`) and applies `document.documentElement.style.zoom` to scale content to fill the phone screen. Fallback uses `transform: scale()` for Firefox. Applied to both `index.html` and `admin.html`.
+8. **Admin table** — Already has `overflow-x: auto`; ensure search/export work on narrow screens.
 
 ### Files Modified
-- `style.css` — Full rewrite (same design tokens, colors, fonts, just fixed sizing)
-- `admin.html` — Minor inline style adjustments
+- `style.css` — Full rewrite (same design tokens, colors, fonts, larger fixed sizing, container max-width override)
+- `index.html` — Cache buster update + auto-scale script
+- `admin.html` — Cache buster update + auto-scale script + touch-friendly inline style adjustments
 - `PLAN.md` — This section
 
 ### What Does NOT Change

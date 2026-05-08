@@ -515,5 +515,23 @@
         .replace(/"/g, '&quot;');
     }
   </script>
+
+  <!-- Auto-scale for iframe embedding on mobile devices -->
+  <script>
+    (function () {
+      var sw = window.screen ? screen.width : 0;
+      var vw = window.innerWidth;
+      if (sw > 0 && vw > sw * 1.3) {
+        var ratio = sw / vw;
+        document.documentElement.style.zoom = ratio;
+        if (!('zoom' in document.documentElement.style)) {
+          document.documentElement.style.transform = 'scale(' + ratio + ')';
+          document.documentElement.style.transformOrigin = 'top left';
+          document.documentElement.style.width = (100 / ratio) + '%';
+          document.documentElement.style.height = (100 / ratio) + '%';
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
