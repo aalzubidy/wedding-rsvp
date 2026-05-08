@@ -105,31 +105,25 @@ CREATE TABLE IF NOT EXISTS guests (
 ## Phase 3: Mobile-First CSS Redesign
 
 ### Problem
-The site is embedded in a Cloudflare-hosted iframe. In that context:
-- The viewport meta tag (`width=device-width`) does not reflect the actual phone screen size
-- `vw`-based units (`clamp(1.9rem, 7vw, ...)`) calculate against the iframe width, not the phone
-- `@media (max-width: 480px)` queries never fire because the iframe is wider than 480px
-- Result: text and UI elements render too small to read on mobile
+The site was too small on mobile phones — text, buttons, and inputs were hard to read. The viewport meta tag and fixed `rem` sizes weren't enough to make the site feel "phone-sized." Previous auto-scale JS hacks for iframe embedding didn't trigger reliably.
 
 ### Approach
-Rewrite `style.css` to be **truly mobile-first with fixed sizing**. The site is a simple single-column form with no desktop-specific layout, so a single design works for all screen sizes:
+Rewrote `style.css` with significantly larger fixed sizing so the site is immediately readable on ~375px phone screens without any zoom tricks. A single design works at all screen widths — no media queries, no container queries, no auto-scale JavaScript needed.
 
-1. **Replace all viewport-relative sizing** — Remove all `clamp()` with `vw` units. Use fixed `rem`/`px` values sized for ~375px phone screens (but readable at any width).
-2. **Container fills available space** — Remove the hard `max-width: 680px` cap. Let the container naturally fill the iframe/viewport with generous padding. Override Bootstrap's responsive `max-width` with `max-width: 100% !important`.
-3. **Mobile-first container query strategy** — Use `@container` queries only to **widen** spacing on larger screens (the opposite of current approach).
-4. **Larger typography** — Body font `1.125rem`, headings `2.6rem`/`1.8rem`, labels `0.875rem`. All fixed `rem` sizes.
-5. **Touch-friendly targets** — All interactive elements at least `44px` tall, generous padding on inputs and buttons.
-6. **Radio buttons always stacked** — Vertical stack works at all widths, no side-by-side needed.
-7. **Auto-scale JavaScript** — Detects iframe/screen width mismatch (`window.innerWidth > screen.width * 1.3`) and applies `document.documentElement.style.zoom` to scale content to fill the phone screen. Fallback uses `transform: scale()` for Firefox. Applied to both `index.html` and `admin.html`.
-8. **Admin table** — Already has `overflow-x: auto`; ensure search/export work on narrow screens.
+1. **Larger typography** — Body `1.25rem` (20px), h1 `3.2rem`, h2 `2.2rem`, labels `1rem`, inputs `1.125rem`.
+2. **Full-width container** — `width: 92%`, `max-width: 680px`. Content fills most of the screen on mobile.
+3. **Bigger touch targets** — Inputs/buttons `min-height: 52–58px`, radio labels `56px`. Generous padding on all interactive elements.
+4. **Removed auto-scale JS** — No longer needed since the design is naturally phone-sized. Removed from both `index.html` and `admin.html`.
+5. **Removed container queries** — Not needed; single design at all widths.
+6. **Larger admin page** — Search, export, filter banner, summary stats all scaled up to match.
 
 ### Files Modified
-- `style.css` — Full rewrite (same design tokens, colors, fonts, larger fixed sizing, container max-width override)
-- `index.html` — Cache buster update + auto-scale script
-- `admin.html` — Cache buster update + auto-scale script + touch-friendly inline style adjustments
+- `style.css` — Full rewrite: larger fixed rem sizes, full-width container, bigger touch targets
+- `index.html` — Cache buster `v=9`, removed Bootstrap padding classes, removed auto-scale script
+- `admin.html` — Cache buster `v=9`, removed auto-scale script, bumped all inline style sizes
 - `PLAN.md` — This section
 
-### What Does NOT Change
+### What Did NOT Change
 - All HTML structure in `index.html` and `admin.html`
 - All JavaScript (i18n, form logic, admin logic, API calls)
 - All design tokens (colors, fonts, border radius, shadows)

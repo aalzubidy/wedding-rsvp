@@ -13,14 +13,13 @@
   --error: #c0392b;
   --success: #4a7c59;
   --shadow: 0 6px 32px rgba(28, 26, 20, 0.12);
-  --radius: 12px;
+  --radius: 14px;
 }
 
 /* ============================================================
-   Base — mobile-first defaults
+   Base
    ============================================================ */
 html {
-  /* Prevent iOS zoom on input focus by ensuring 16px minimum */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -29,8 +28,8 @@ body {
   background: radial-gradient(ellipse at top, #f5e9c8 0%, #fdfaf4 55%);
   color: var(--text-dark);
   font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: 1.25rem;
+  line-height: 1.65;
   min-height: 100vh;
   overflow-x: hidden;
   margin: 0;
@@ -49,7 +48,7 @@ body {
 }
 
 /* ============================================================
-   Typography — fixed rem sizes, no viewport units
+   Typography
    ============================================================ */
 h1, h2, h3 {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
@@ -57,35 +56,19 @@ h1, h2, h3 {
   line-height: 1.2;
 }
 
-h1 { font-size: 2.6rem; letter-spacing: 0.04em; }
-h2 { font-size: 1.8rem; }
+h1 { font-size: 3.2rem; letter-spacing: 0.04em; }
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.6rem; }
 
 /* ============================================================
-   Container — fills available space, mobile-first
+   Container — fills most of the screen
    ============================================================ */
 .rsvp-container {
-  max-width: 100% !important;
-  padding-left: 1.5rem !important;
-  padding-right: 1.5rem !important;
-  padding-top: 1.5rem !important;
-  padding-bottom: 1.5rem !important;
-  /* Container queries: respond to this element's width, not viewport.
-     Critical for iframe embedding where viewport ≠ device width. */
-  container-type: inline-size;
-  container-name: rsvp;
-}
-
-/* On wider containers, center and cap the content */
-@container rsvp (min-width: 600px) {
-  .rsvp-container {
-    max-width: 640px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 2.5rem !important;
-    padding-right: 2.5rem !important;
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.5rem !important;
-  }
+  width: 92% !important;
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 2rem 0 !important;
 }
 
 /* ============================================================
@@ -93,27 +76,27 @@ h2 { font-size: 1.8rem; }
    ============================================================ */
 .lang-switcher {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
   justify-content: flex-end;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
 [dir="rtl"] .lang-switcher { justify-content: flex-start; }
 
 .lang-btn {
-  padding: 0.45rem 1rem;
+  padding: 0.6rem 1.3rem;
   border: 1.5px solid var(--border);
   border-radius: 99px;
   background: none;
   color: var(--text-muted);
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s;
   white-space: nowrap;
-  min-height: 44px;
+  min-height: 52px;
   display: inline-flex;
   align-items: center;
 }
@@ -135,9 +118,9 @@ h2 { font-size: 1.8rem; }
    ============================================================ */
 .hero {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1rem;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   background: linear-gradient(160deg, rgba(245, 238, 216, 0.35), transparent 70%);
   border-radius: var(--radius);
 }
@@ -149,12 +132,12 @@ h2 { font-size: 1.8rem; }
 }
 
 .hero .event-details {
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: 1.15rem;
 }
 
 .hero .event-details strong {
@@ -169,12 +152,12 @@ h2 { font-size: 1.8rem; }
 .site-footer {
   text-align: center;
   color: var(--accent);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   opacity: 0.8;
 }
 
-.divider     { margin: 1.5rem 0; }
-.site-footer { margin-top: 2rem; opacity: 0.6; }
+.divider     { margin: 2rem 0; }
+.site-footer { margin-top: 2.5rem; opacity: 0.6; }
 
 /* ============================================================
    Card
@@ -187,14 +170,14 @@ h2 { font-size: 1.8rem; }
 }
 
 .rsvp-card .card-body {
-  padding: 1.5rem 1.25rem;
+  padding: 2rem 1.5rem;
 }
 
 .rsvp-card-title {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 400;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   color: var(--accent-hover);
   text-align: center;
 }
@@ -202,36 +185,36 @@ h2 { font-size: 1.8rem; }
 .card-message {
   text-align: center;
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-style: italic;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 /* ============================================================
    Form
    ============================================================ */
 .form-label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   display: block;
 }
 
 .rsvp-input {
   font-family: inherit !important;
-  font-size: 1rem !important;
+  font-size: 1.125rem !important;
   color: var(--text-dark) !important;
   background: var(--cream) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 0.75rem 1rem !important;
-  min-height: 44px;
+  padding: 0.9rem 1.15rem !important;
+  min-height: 52px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -246,8 +229,8 @@ h2 { font-size: 1.8rem; }
 .radio-group {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  margin-top: 0.25rem;
+  gap: 0.8rem;
+  margin-top: 0.35rem;
 }
 
 .radio-option {
@@ -266,11 +249,11 @@ h2 { font-size: 1.8rem; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0.85rem 1rem;
+  padding: 1rem 1.15rem;
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -278,7 +261,7 @@ h2 { font-size: 1.8rem; }
   background: var(--cream);
   transition: all 0.2s;
   user-select: none;
-  min-height: 48px;
+  min-height: 56px;
   width: 100%;
   margin-bottom: 0;
   box-sizing: border-box;
@@ -300,8 +283,8 @@ h2 { font-size: 1.8rem; }
 /* Guest names */
 .guest-fields {
   display: none;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--border);
 }
 
@@ -309,8 +292,8 @@ h2 { font-size: 1.8rem; }
 
 .guest-name-row {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.65rem;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
   align-items: center;
 }
 
@@ -322,13 +305,13 @@ h2 { font-size: 1.8rem; }
   border-radius: var(--radius);
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1;
-  padding: 0.6rem 0.75rem;
+  padding: 0.7rem 0.85rem;
   transition: all 0.15s;
   flex-shrink: 0;
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 52px;
+  min-width: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -346,15 +329,15 @@ h2 { font-size: 1.8rem; }
   color: var(--accent-hover);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  padding: 0.65rem 1rem;
+  padding: 0.8rem 1.15rem;
   text-transform: uppercase;
   transition: all 0.15s;
   width: 100%;
-  margin-top: 0.25rem;
-  min-height: 48px;
+  margin-top: 0.35rem;
+  min-height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -371,16 +354,16 @@ h2 { font-size: 1.8rem; }
   color: white;
   cursor: pointer;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  padding: 1rem 2rem;
+  padding: 1.1rem 2rem;
   text-transform: uppercase;
   transition: all 0.2s;
   width: 100%;
-  margin-top: 1.5rem;
+  margin-top: 1.75rem;
   box-shadow: 0 3px 12px rgba(138, 110, 37, 0.3);
-  min-height: 52px;
+  min-height: 58px;
   box-sizing: border-box;
 }
 
@@ -403,9 +386,9 @@ h2 { font-size: 1.8rem; }
 .message {
   display: none;
   border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-  font-size: 1rem;
-  margin-top: 1rem;
+  padding: 1.1rem 1.3rem;
+  font-size: 1.1rem;
+  margin-top: 1.25rem;
 }
 
 .message.visible { display: block; }
@@ -428,15 +411,15 @@ h2 { font-size: 1.8rem; }
 .thank-you {
   display: none;
   text-align: center;
-  padding: 2.5rem 1rem;
+  padding: 3rem 1rem;
 }
 
 .thank-you.visible { display: block; }
 
 .thank-you-icon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: var(--accent);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   line-height: 1;
   animation: heartbeat 1.5s ease-in-out;
 }
@@ -447,73 +430,74 @@ h2 { font-size: 1.8rem; }
   100% { transform: scale(1);   opacity: 1; }
 }
 
-.thank-you h2 { color: var(--accent-hover); margin-bottom: 0.75rem; }
+.thank-you h2 { color: var(--accent-hover); margin-bottom: 1rem; }
 .thank-you p  { color: var(--text-muted); }
 
 /* ============================================================
    Admin Page
    ============================================================ */
 .page-wrapper {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
+  width: 92%;
+  max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  padding: 2rem 0;
 }
 
 .admin-header {
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 2rem 0;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.admin-header h1 { font-size: 1.8rem; color: var(--text-dark); }
-.admin-header p  { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.4rem; }
+.admin-header h1 { font-size: 2.2rem; color: var(--text-dark); }
+.admin-header p  { color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem; }
 
 .card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   background: var(--warm-white);
-  padding: 1.5rem 1.25rem;
-  max-width: 480px;
+  padding: 2rem 1.5rem;
+  max-width: 520px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .card-title {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 400;
   color: var(--accent-hover);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted);
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .form-group input {
   width: 100%;
   font-family: 'Lato', sans-serif;
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: var(--text-dark);
   background: var(--cream);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0.75rem 1rem;
-  min-height: 44px;
+  padding: 0.9rem 1.15rem;
+  min-height: 52px;
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.18s, box-shadow 0.18s;
@@ -532,32 +516,32 @@ h2 { font-size: 1.8rem; }
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .summary-stat {
   background: var(--warm-white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem 0.5rem;
+  padding: 1.25rem 0.75rem;
   text-align: center;
   box-shadow: var(--shadow);
 }
 
 .summary-stat .number {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 2rem;
+  font-size: 2.4rem;
   line-height: 1;
   color: var(--accent-hover);
 }
 
 .summary-stat .label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-muted);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
 }
 
 .guest-table-wrapper {
@@ -571,25 +555,25 @@ h2 { font-size: 1.8rem; }
   width: 100%;
   border-collapse: collapse;
   background: var(--warm-white);
-  font-size: 0.9rem;
+  font-size: 1rem;
   min-width: 560px;
 }
 
 .guest-table th {
   background: var(--accent-light);
   color: var(--text-dark);
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 0.7rem 0.75rem;
+  padding: 0.85rem 0.85rem;
   text-align: left;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 
 .guest-table td {
-  padding: 0.6rem 0.75rem;
+  padding: 0.75rem 0.85rem;
   border-bottom: 1px solid var(--border);
   color: var(--text-dark);
   vertical-align: middle;
@@ -601,9 +585,9 @@ h2 { font-size: 1.8rem; }
 
 .badge {
   display: inline-block;
-  padding: 0.2rem 0.55rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 99px;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -614,8 +598,8 @@ h2 { font-size: 1.8rem; }
 
 .section-title {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 400;
   color: var(--text-dark);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }

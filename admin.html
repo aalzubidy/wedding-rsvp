@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=9" />
   <style>
     /* ── Summary card interactive ── */
     .summary-stat {
@@ -27,7 +27,7 @@
     /* ── Numbers: clean sans-serif, not fancy serif ── */
     .summary-stat .number {
       font-family: 'Inter', 'Lato', system-ui, sans-serif;
-      font-size: 2.6rem;
+      font-size: 3rem;
       font-weight: 600;
       font-variant-numeric: tabular-nums;
       line-height: 1;
@@ -44,12 +44,12 @@
     .search-input {
       flex: 1;
       min-width: 180px;
-      padding: 0.65rem 0.9rem;
-      min-height: 44px;
+      padding: 0.9rem 1.15rem;
+      min-height: 52px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-family: 'Lato', sans-serif;
-      font-size: 0.875rem;
+      font-size: 1.125rem;
       color: var(--text-dark);
       background: var(--warm-white);
       outline: none;
@@ -62,22 +62,22 @@
     }
     .search-input::placeholder { color: var(--text-muted); }
     .btn-export {
-      padding: 0.65rem 1.1rem;
-      min-height: 44px;
+      padding: 0.85rem 1.3rem;
+      min-height: 52px;
       display: inline-flex;
       align-items: center;
       background: none;
       border: 1.5px solid var(--border);
       border-radius: 8px;
       font-family: 'Lato', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.18s;
       letter-spacing: 0.03em;
-      margin: 1rem 0;
+      margin: 1.25rem 0;
     }
     .btn-export:hover {
       border-color: var(--accent);
@@ -103,10 +103,10 @@
       display: none;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       color: var(--accent-hover);
       font-weight: 600;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
     }
     .filter-banner.visible { display: flex; }
     .filter-banner button {
@@ -114,7 +114,7 @@
       border: none;
       cursor: pointer;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       padding: 0;
       text-decoration: underline;
     }
@@ -126,7 +126,7 @@
       color: var(--text-muted);
       padding: 2rem;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
     }
     /* ── Action buttons ── */
     .action-row {
@@ -136,12 +136,12 @@
       gap: 0.5rem;
       flex-wrap: wrap;
     }
-    .action-row .btn-submit { width: auto; padding: 0.65rem 1.5rem; min-height: 44px; }
+    .action-row .btn-submit { width: auto; padding: 0.85rem 1.75rem; min-height: 52px; }
     .action-row .btn-logout { background: var(--text-muted); }
   </style>
 </head>
 <body>
-  <div class="page-wrapper" style="max-width:1600px;">
+  <div class="page-wrapper">
 
     <header class="admin-header">
       <h1>RSVP Report</h1>
@@ -516,22 +516,5 @@
     }
   </script>
 
-  <!-- Auto-scale for iframe embedding on mobile devices -->
-  <script>
-    (function () {
-      var sw = window.screen ? screen.width : 0;
-      var vw = window.innerWidth;
-      if (sw > 0 && vw > sw * 1.3) {
-        var ratio = sw / vw;
-        document.documentElement.style.zoom = ratio;
-        if (!('zoom' in document.documentElement.style)) {
-          document.documentElement.style.transform = 'scale(' + ratio + ')';
-          document.documentElement.style.transformOrigin = 'top left';
-          document.documentElement.style.width = (100 / ratio) + '%';
-          document.documentElement.style.height = (100 / ratio) + '%';
-        }
-      }
-    })();
-  </script>
 </body>
 </html>
