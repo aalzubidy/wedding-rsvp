@@ -29,7 +29,7 @@ body {
   background: radial-gradient(ellipse at top, #f5e9c8 0%, #fdfaf4 55%);
   color: var(--text-dark);
   font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
@@ -57,17 +57,18 @@ h1, h2, h3 {
   line-height: 1.2;
 }
 
-h1 { font-size: 2.2rem; letter-spacing: 0.04em; }
-h2 { font-size: 1.6rem; }
+h1 { font-size: 2.6rem; letter-spacing: 0.04em; }
+h2 { font-size: 1.8rem; }
 
 /* ============================================================
    Container — fills available space, mobile-first
    ============================================================ */
 .rsvp-container {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  max-width: 100% !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
   /* Container queries: respond to this element's width, not viewport.
      Critical for iframe embedding where viewport ≠ device width. */
   container-type: inline-size;
@@ -77,13 +78,13 @@ h2 { font-size: 1.6rem; }
 /* On wider containers, center and cap the content */
 @container rsvp (min-width: 600px) {
   .rsvp-container {
-    max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    max-width: 640px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 2.5rem !important;
+    padding-right: 2.5rem !important;
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
   }
 }
 
