@@ -101,3 +101,35 @@ CREATE TABLE IF NOT EXISTS guests (
 - No auth beyond simple password on admin
 - No framework (React, Vue, etc.)
 - VPS not used (Vercel handles everything)
+
+## Phase 3: Mobile-First CSS Redesign
+
+### Problem
+The site is embedded in a Cloudflare-hosted iframe. In that context:
+- The viewport meta tag (`width=device-width`) does not reflect the actual phone screen size
+- `vw`-based units (`clamp(1.9rem, 7vw, ...)`) calculate against the iframe width, not the phone
+- `@media (max-width: 480px)` queries never fire because the iframe is wider than 480px
+- Result: text and UI elements render too small to read on mobile
+
+### Approach
+Rewrite `style.css` to be **truly mobile-first with fixed sizing**. The site is a simple single-column form with no desktop-specific layout, so a single design works for all screen sizes:
+
+1. **Replace all viewport-relative sizing** — Remove all `clamp()` with `vw` units. Use fixed `rem`/`px` values sized for ~375px phone screens (but readable at any width).
+2. **Container fills available space** — Remove the hard `max-width: 680px` cap. Let the container naturally fill the iframe/viewport with generous padding.
+3. **Mobile-first container query strategy** — Use `@container` queries only to **widen** spacing on larger screens (the opposite of current approach).
+4. **Typography** — Fixed `rem` sizes: body `1rem`, headings scaled with `rem`, labels `0.875rem` minimum.
+5. **Touch-friendly targets** — All interactive elements at least `44px` tall, generous padding on inputs and buttons.
+6. **Radio buttons always stacked** — Vertical stack works at all widths, no side-by-side needed.
+7. **Admin table** — Already has `overflow-x: auto`; ensure search/export work on narrow screens.
+
+### Files Modified
+- `style.css` — Full rewrite (same design tokens, colors, fonts, just fixed sizing)
+- `admin.html` — Minor inline style adjustments
+- `PLAN.md` — This section
+
+### What Does NOT Change
+- All HTML structure in `index.html` and `admin.html`
+- All JavaScript (i18n, form logic, admin logic, API calls)
+- All design tokens (colors, fonts, border radius, shadows)
+- Bootstrap CSS remains loaded
+- No changes to any API files

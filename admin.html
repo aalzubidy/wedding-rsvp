@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=8" />
   <style>
     /* ── Summary card interactive ── */
     .summary-stat {
@@ -44,7 +44,8 @@
     .search-input {
       flex: 1;
       min-width: 180px;
-      padding: 0.55rem 0.9rem;
+      padding: 0.65rem 0.9rem;
+      min-height: 44px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-family: 'Lato', sans-serif;
@@ -53,6 +54,7 @@
       background: var(--warm-white);
       outline: none;
       transition: border-color 0.18s, box-shadow 0.18s;
+      box-sizing: border-box;
     }
     .search-input:focus {
       border-color: var(--accent);
@@ -60,7 +62,10 @@
     }
     .search-input::placeholder { color: var(--text-muted); }
     .btn-export {
-      padding: 0.55rem 1.1rem;
+      padding: 0.65rem 1.1rem;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
       background: none;
       border: 1.5px solid var(--border);
       border-radius: 8px;
@@ -131,7 +136,7 @@
       gap: 0.5rem;
       flex-wrap: wrap;
     }
-    .action-row .btn-submit { width: auto; padding: 0.6rem 1.5rem; }
+    .action-row .btn-submit { width: auto; padding: 0.65rem 1.5rem; min-height: 44px; }
     .action-row .btn-logout { background: var(--text-muted); }
   </style>
 </head>
